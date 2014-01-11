@@ -1,0 +1,18 @@
+Local setup (testet by Fedora 20)
+
+* Create and activate virtualenv
+
+** virtualenv venv -p python2.7 --distribute --no-site-packages
+** source venv/bin/activate
+
+* Install python packages
+
+** pip install -r requirements.txt
+
+* Create database
+
+** python manage.py syncdb
+*** Super user: admin|admin@admin.adm|pa$$w0rd
+
+** python manage.py migrate
+
