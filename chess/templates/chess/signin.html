@@ -1,0 +1,21 @@
+{% extends 'chess/base.html' %}
+
+{% block title %}Chess tournament{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="form-signin" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">Please sign in</h2>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <p>Your username and password didn't match. Please try again.</p>
+            </div> 
+            {% endif %}
+            <input type="username" name="username" class="form-control" placeholder="User name" required autofocus>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <input type="hidden" name="next" value="{{ next }}" />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+    </div> <!-- /container -->
+{% endblock %}

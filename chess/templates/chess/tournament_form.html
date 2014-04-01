@@ -1,0 +1,63 @@
+{% extends 'chess/base.html' %}
+
+{% block title %}Chess tournament{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h2>Manage tournaments</h2>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+               <b>Add tournament</b>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form" action="" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group {% if field.errors %} has-error {% endif %}">
+                        <label class="col-sm-2 control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <div class="col-sm-10">
+                          {{ field }}
+                          <span class="alert-danger">{{ field.errors }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+               <b>Tournaments</b>
+            </div>
+            <div class="panel-body">
+                {% for tournament in object_list %}
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h3>{{ tournament.name }}</h3>
+                                <p>Count of winners: {{ tournament.winners_count }}</p>
+                                <p>...</p>
+                                <div class="btn-group">
+                                    <a href="{% url 'tournament_detail' pk=tournament.id %}" class="btn btn-primary" role="button">Manage</a>
+                                </div>
+                                <div class="btn-group">
+                                    <form method="post" action="{% url 'tournament_delete' pk=tournament.id %}">
+                                        {% csrf_token %}
+                                        <input class="hidden" value="DELETE">
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div> <!-- /container -->
+{% endblock %}

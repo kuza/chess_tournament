@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MinValueValidator
 
 
 class NameModel(models.Model):
@@ -12,28 +13,22 @@ class NameModel(models.Model):
         return self.name
 
 
-class Player(NameModel):
-    rating = models.IntegerField(_('Rating'))
-    
-    
 class Tournament(NameModel):
-    pass
+    winners_count = models.IntegerField(_('Count of winners'), default=1, validators=[MinValueValidator(1)])
 
 
-class RatingHistory(models.Model):
-    player = models.ForeignKey(Player, verbose_name=_('Player'))
-    tournament = models.ForeignKey(Tournament, verbose_name=_('Tournament'))
-    date = models.DateTimeField(_('Created at'), auto_now_add=True, editable=False)
+class Player(NameModel):
+    tournament = models.ForeignKey(Tournament, verbose_name=_('Tournament'), related_name='players')
     rating = models.IntegerField(_('Rating'))
-
+    
     class Meta:
-        unique_together = ('player', 'tournament', 'date')
-    
-    
+        unique_together = ('name', 'tournament')
+
+
 class Round(models.Model):
-    serial_number = models.IntegerField(_('Serial number'))
-    tournament = models.ForeignKey(Tournament, verbose_name=_('Tournament'))
-    players = models.ManyToManyField(Player, verbose_name=_('Players') )
+    serial_number = models.IntegerField(_('Serial number'), editable=False)
+    tournament = models.ForeignKey(Tournament, verbose_name=_('Tournament'), related_name='rounds')
+    players = models.ManyToManyField(Player, verbose_name=_('Players'), null=True, blank=True)
     
     class Meta:
         unique_together = ('serial_number', 'tournament')
