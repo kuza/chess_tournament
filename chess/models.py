@@ -1,3 +1,5 @@
+from math import log
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinValueValidator
@@ -15,6 +17,28 @@ class NameModel(models.Model):
 
 class Tournament(NameModel):
     winners_count = models.IntegerField(_('Count of winners'), default=1, validators=[MinValueValidator(1)])
+    
+    @property
+    def last_round(self):
+        return self.rounds.order_by('-serial_number').first()
+    
+    @property
+    def in_progress(self):
+        if self.last_round:
+            return self.last_round.in_progress
+        return False
+
+    @property
+    def count_rounds(self):
+        if self.last_round:
+            players = self.last_round.players.count()
+        else:
+            players = self.players.count()
+            
+        if players and self.winners_count:
+            return log(players, 2) + log(self.winners_count, 2)
+
+        return 0
 
 
 class Player(NameModel):
@@ -35,6 +59,14 @@ class Round(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.tournament.name, self.serial_number)
+    
+    @property
+    def progress(self):
+        return '{pairs} / {winners}'.format(pairs=self.pairs.count(), winners=self.pairs.filter(winner__isnull=False).count())
+    
+    @property
+    def in_progress(self):
+        return self.pairs.count() != self.pairs.filter(winner__isnull=False).count()
 
     def create_pairs(self):
         count_players_in_first_group = self.players.count() // 2

@@ -42,7 +42,8 @@
                             <div class="caption">
                                 <h3>{{ tournament.name }}</h3>
                                 <p>Count of winners: {{ tournament.winners_count }}</p>
-                                <p>...</p>
+                                <p>Count of rounds: {{ tournament.count_rounds|floatformat:"0" }}</p>
+                                <p>Active round: {% if tournament.last_round %} {{ tournament.last_round.serial_number }} {% else %}Not start{% endif %}</p>
                                 <div class="btn-group">
                                     <a href="{% url 'tournament_detail' pk=tournament.id %}" class="btn btn-primary" role="button">Manage</a>
                                 </div>

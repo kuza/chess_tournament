@@ -15,10 +15,17 @@
                         <b>Rounds</b>
                     </div>
                     <div class="panel-body">
-                        <form method="get" action="{% url 'round_create' %}">
-                            {{ round_form.tournament }}
-                            <button class="btn btn-primary" type="submit">{% if rounds.count %}New round{% else %}Start tournament{% endif %}</button>
-                        </form>
+                        <div class="col-lg-9">
+                            <p>Count of rounds: {{ object.count_rounds|floatformat:"0" }}</p>
+                        </div>
+                        <div class="col-lg-3">
+                            {% if not object.in_progress %}
+                            <form method="get" action="{% url 'round_create' %}">
+                                {{ round_form.tournament }}
+                                <button class="btn btn-primary" type="submit">{% if rounds.count %}New round{% else %}Start tournament{% endif %}</button>
+                            </form>
+                            {% endif %}
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -29,8 +36,8 @@
                             <tbody>
                                 {% for round in rounds %}
                                     <tr>
-                                        <td>{{round.serial_number}}</td>
-                                        <td>...</td>
+                                        <td>{{ round.serial_number }}</td>
+                                        <td>{{ round.progress }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <a href="{% url 'round_detail' pk=round.id %}" class="btn btn-primary btn-xs" role="button">Update</a>
@@ -52,34 +59,36 @@
             </div>
             {% endif %}
             <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                       <b>Add players</b>
-                    </div>
-                    <div class="panel-body">
-                        <form class="form-horizontal" role="form" action="{% url 'player_create' %}" method="post">
-                            {% csrf_token %}
-                            {% for field in player_form %}
-                                {% if field.is_hidden %}
-                                    {{ field }}
-                                {% else %}
-                                    <div class="form-group {% if field.errors %} has-error {% endif %}">
-                                        <label class="col-sm-2 control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        <div class="col-sm-10">
-                                          {{ field }}
-                                          <span class="alert-danger">{{ field.errors }}</span>
+                {% if rounds.count == 0 %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           <b>Add players</b>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form" action="{% url 'player_create' %}" method="post">
+                                {% csrf_token %}
+                                {% for field in player_form %}
+                                    {% if field.is_hidden %}
+                                        {{ field }}
+                                    {% else %}
+                                        <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                            <label class="col-sm-2 control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <div class="col-sm-10">
+                                              {{ field }}
+                                              <span class="alert-danger">{{ field.errors }}</span>
+                                            </div>
                                         </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button class="btn btn-primary" type="submit">Add</button>
                                     </div>
-                                {% endif %}
-                            {% endfor %}
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <button class="btn btn-primary" type="submit">Add</button>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                    {% endif %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                        <b>Players</b>
