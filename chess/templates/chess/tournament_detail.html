@@ -8,19 +8,16 @@
             <h2>Manage tournament: {{object.name}}</h2>
         </div>
         <div class="row">
-            {% if True %}
+            {% if players.count > 1%}
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <b>Rounds</b>
                     </div>
                     <div class="panel-body">
-                        <form method="post" action="{% url 'round_create' %}">
-                            {% csrf_token %}
-                            {% for field in round_form %}
-                                {{ field }}
-                            {% endfor %}
-                            <button class="btn btn-primary" type="submit">Start tournament</button>
+                        <form method="get" action="{% url 'round_create' %}">
+                            {{ round_form.tournament }}
+                            <button class="btn btn-primary" type="submit">{% if rounds.count %}New round{% else %}Start tournament{% endif %}</button>
                         </form>
                         <table class="table table-striped">
                             <thead>
@@ -30,6 +27,24 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for round in rounds %}
+                                    <tr>
+                                        <td>{{round.serial_number}}</td>
+                                        <td>...</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'round_detail' pk=round.id %}" class="btn btn-primary btn-xs" role="button">Update</a>
+                                            </div>
+                                             <div class="btn-group">
+                                               <form method="post" action="{% url 'round_delete' pk=round.id %}">
+                                                    {% csrf_token %}
+                                                    <input class="hidden" value="DELETE">
+                                                    <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -83,11 +98,13 @@
                                         <td>{{player.name}}</td>
                                         <td>{{player.rating}}</td>
                                         <td>
-                                            <form method="post" action="{% url 'player_delete' pk=player.id %}">
-                                                {% csrf_token %}
-                                                <input class="hidden" value="DELETE">
-                                                <button class="btn btn-danger btn-xs" type="submit">Delete</button>
-                                            </form>
+                                            {% if rounds.count == 0 %}
+                                                <form method="post" action="{% url 'player_delete' pk=player.id %}">
+                                                    {% csrf_token %}
+                                                    <input class="hidden" value="DELETE">
+                                                    <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                                                </form>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

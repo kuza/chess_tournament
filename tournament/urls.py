@@ -24,4 +24,9 @@ urlpatterns = patterns('',
     url(r'^manage/player/(?P<pk>\d+)/delete/$', views.PlayerDelete.as_view(), name='player_delete'),
 
     url(r'^manage/round/$', views.RoundCreate.as_view(), name='round_create'),
-)
+    url(r'^manage/round/(?P<pk>\d+)/$', views.RoundDetail.as_view(), name='round_detail'),
+    url(r'^manage/round/(?P<pk>\d+)/delete/$', views.RoundDelete.as_view(), name='round_delete'),
+    
+    url(r'^manage/pair/(?P<pk>\d+)/$', views.PairUpdate.as_view(), name='pair_update'),
+    
+ )

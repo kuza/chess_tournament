@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Tournament, Player, Round 
+from .models import Tournament, Player, Round, Pair 
 
 class TournamentForms(forms.ModelForm):
     class Meta:
@@ -37,9 +37,23 @@ class PlayerForms(forms.ModelForm):
 
 
 class RoundForms(forms.ModelForm):
+    serial_number = forms.IntegerField(widget=forms.HiddenInput(), label=_('Round number'))
+    
     class Meta:
         model = Round
-        fields=('tournament', )
         widgets = {
-            'tournament': forms.HiddenInput()
+            'tournament': forms.HiddenInput(),
+            'players': forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
         }
+
+    def save(self, commit=True):
+        cur_round = super(RoundForms, self).save(commit)
+        if commit:
+            cur_round.create_pairs()
+        return cur_round
+
+
+class PairForms(forms.ModelForm):
+    class Meta:
+        model = Pair
+        fields = ('winner', )
