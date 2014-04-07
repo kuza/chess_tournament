@@ -24,7 +24,7 @@ class PlayerForms(forms.ModelForm):
             'tournament': forms.HiddenInput()
         }
 
-    def cleam_name(self):
+    def clean_name(self):
         name = self.cleaned_data["name"]
         try:
             Player.objects.get(name=name, tournament=self.tournament)
@@ -39,12 +39,29 @@ class PlayerForms(forms.ModelForm):
 class RoundForms(forms.ModelForm):
     serial_number = forms.IntegerField(widget=forms.HiddenInput(), label=_('Round number'))
     
+    error_messages = {
+        'round_error': _("You can't create more rounds than calculated."),
+    }
+
     class Meta:
         model = Round
         widgets = {
             'tournament': forms.HiddenInput(),
             'players': forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
         }
+
+    def clean_players(self):
+        players = self.cleaned_data["players"]
+        tournament = self.cleaned_data["tournament"]
+        last_round = tournament.last_round
+        serial_number = last_round.serial_number if last_round else 0
+        if (serial_number > tournament.get_count_rounds(len(players))
+            or serial_number == tournament.count_rounds):
+            raise forms.ValidationError(
+                self.error_messages['round_error'],
+                code='round_error',
+            )
+        return players
 
     def save(self, commit=True):
         cur_round = super(RoundForms, self).save(commit)

@@ -57,7 +57,7 @@ class RoundCreate(CreateView):
             tournament = Tournament.objects.get(id = request.GET.get('tournament'))
             last_round = tournament.rounds.order_by('-serial_number').first()
             serial_number = last_round.serial_number if last_round else 0
-            self.initial.update(tournament=tournament, players=tournament.players.all(), serial_number=serial_number+1)
+            self.initial.update(tournament=tournament, players=last_round.players.all() if last_round else tournament.players.all(), serial_number=serial_number+1)
         except Tournament.DoesNotExist:
             pass
         

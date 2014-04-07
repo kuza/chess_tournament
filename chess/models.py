@@ -27,14 +27,17 @@ class Tournament(NameModel):
         if self.last_round:
             return self.last_round.in_progress
         return False
-
+    
     @property
     def count_rounds(self):
         if self.last_round:
             players = self.last_round.players.count()
         else:
             players = self.players.count()
-            
+        
+        return self.get_count_rounds(players)
+    
+    def get_count_rounds(self, players=None):
         if players and self.winners_count:
             return log(players, 2) + log(self.winners_count, 2)
 
@@ -71,7 +74,7 @@ class Round(models.Model):
     def _get_user_group(self, group, exclude_user):
         return self.players.exclude(id__in=[exclude_user.id] if exclude_user else []).filter(id__in=Rival.objects.values('player').annotate(sum_score=models.Sum('score')).filter(sum_score=group).values_list('player', flat=True)).order_by('-rating')
     
-    def _get_colors(self, player1, player2=None):
+    def _get_colors(self, player1, player2=None, winner=None):
         colors = {0: 'white', 1: 'black'}
         if player2:
             player1_prev = player1.rivals.order_by('-round__id')[0].color
@@ -89,19 +92,23 @@ class Round(models.Model):
                 return {colors[player2_prev]: player1, colors[player1_prev]: player2}
                 
         player1_prev = player1.rivals.order_by('-round__id')[0].color
-        return {colors[0 if player1_prev else 1]: player1, colors[player1_prev]: None, "winner": 0 if player1_prev else 1}
+        return {colors[0 if player1_prev else 1]: player1, colors[player1_prev]: None, "winner": winner or (0 if player1_prev else 1)}
 
     def create_pairs(self):
+        winner = None
+        if self.serial_number > self.tournament.get_count_rounds(self.players.count()):
+            winner = 3
+            
         if self.serial_number == 1:
             count_players_in_first_group = self.players.count() // 2
             second_group = self.players.order_by('-rating')[count_players_in_first_group:]
             pair = 0
             for player in self.players.order_by('-rating')[:count_players_in_first_group]:
-                Pair.objects.create(serial_number=pair+1, round=self, white=player, black=second_group[pair])
+                Pair.objects.create(serial_number=pair+1, round=self, white=player, black=second_group[pair], winner=winner)
                 pair += 1
             
             try:
-                Pair.objects.create(serial_number=pair+1, round=self, white=second_group[pair], black=None, winner=0)
+                Pair.objects.create(serial_number=pair+1, round=self, white=second_group[pair], black=None, winner=winner or 0)
             except IndexError:
                 pass
         else:
@@ -134,14 +141,14 @@ class Round(models.Model):
                 pair = 0
                 for player in cur_group[:count_players_in_first_group]:
                     try:
-                        Pair.objects.create(serial_number=pair_number, round=self, **self._get_colors(player, second_group[pair]))
+                        Pair.objects.create(serial_number=pair_number, round=self, winner=winner, **self._get_colors(player, second_group[pair]))
                         pair += 1
                     except IndexError:
-                        Pair.objects.create(serial_number=pair_number, round=self, **self._get_colors(player, exclude_user))
+                        Pair.objects.create(serial_number=pair_number, round=self, winner=winner, **self._get_colors(player, exclude_user))
                     pair_number += 1
 
                 try:
-                    Pair.objects.create(serial_number=pair_number, round=self, **self._get_colors(second_group[pair]))
+                    Pair.objects.create(serial_number=pair_number, round=self, **self._get_colors(second_group[pair], winner=winner))
                 except IndexError:
                     pass
 
@@ -151,6 +158,7 @@ class Pair(models.Model):
         (0, _('White')),
         (1, _('Black')),
         (2, _('Draw')),
+        (3, _('Cancel'))
     )
 
     serial_number = models.IntegerField(_('Pair number'))

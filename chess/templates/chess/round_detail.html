@@ -42,7 +42,7 @@
                                         </form>
                                     </div>
                                 {% else %}
-                                    <h3>Winner: {% if pair.winner == 0 %} {{ pair.white }} {% elif pair.winner == 1 %} {{ pair.black }} {% else %}Draw{% endif %}</h3>
+                                    <h3>Winner: {% if pair.winner == 0 %} {{ pair.white }} {% elif pair.winner == 1 %} {{ pair.black }} {% elif pair.winner == 2 %}Draw{% else %}Cancel{% endif %}</h3>
                                 {% endif %}
                             </div>
                         </div>

@@ -19,7 +19,7 @@
                             <p>Count of rounds: {{ object.count_rounds|floatformat:"0" }}</p>
                         </div>
                         <div class="col-lg-3">
-                            {% if not object.in_progress %}
+                            {% if not object.in_progress and object.count_rounds > rounds.count %}
                             <form method="get" action="{% url 'round_create' %}">
                                 {{ round_form.tournament }}
                                 <button class="btn btn-primary" type="submit">{% if rounds.count %}New round{% else %}Start tournament{% endif %}</button>
@@ -39,6 +39,7 @@
                                         <td>{{ round.serial_number }}</td>
                                         <td>{{ round.progress }}</td>
                                         <td>
+                                            {% if round == object.last_round %}
                                             <div class="btn-group">
                                                 <a href="{% url 'round_detail' pk=round.id %}" class="btn btn-primary btn-xs" role="button">Update</a>
                                             </div>
@@ -49,6 +50,7 @@
                                                     <button class="btn btn-danger btn-xs" type="submit">Delete</button>
                                                 </form>
                                             </div>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
