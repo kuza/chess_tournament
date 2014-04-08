@@ -42,13 +42,13 @@ class TournamentDetail(DetailView):
         
         cursor = connection.cursor()
         totals = cursor.execute('''
-            SELECT chess_player.id AS id, name, rating, score.score AS score from chess_player
-            LEFT JOIN (SELECT player_id, SUM(score) AS score FROM chess_rival
+            SELECT chess_player.id AS id, name, chess_player.rating AS rating, score.score AS score, chess_player.rating + score.rating AS new_rating from chess_player
+            LEFT JOIN (SELECT player_id, SUM(score) AS score, SUM(rating) AS rating FROM chess_rival
                 INNER JOIN chess_round ON (chess_rival.round_id = chess_round.id)
                 WHERE chess_round.tournament_id = %s
                 GROUP BY player_id) AS score ON (chess_player.id=score.player_id)
             WHERE tournament_id = %s
-            ORDER BY score DESC, rating DESC''', [context['object'].id, context['object'].id]).fetchall()
+            ORDER BY score DESC, new_rating DESC''', [context['object'].id, context['object'].id]).fetchall()
         context['totals'] = totals
 
         context['manage'] = True

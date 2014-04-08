@@ -60,6 +60,20 @@ class Player(NameModel):
     
     class Meta:
         unique_together = ('name', 'tournament')
+        
+    @property
+    def new_rating(self):
+        return self.rating + (self.rivals.aggregate(rating=models.Sum('rating')).get('rating') or 0)
+    
+    @property
+    def k_factor(self):
+        #### I have used USCF
+        if self.new_rating < 2100:
+            return 32
+        elif self.new_rating < 2400:
+            return 24
+        else:
+            return 16
 
 
 class Round(models.Model):
@@ -194,8 +208,9 @@ class Rival(models.Model):
     round = models.ForeignKey(Round, verbose_name=_('Round'), related_name='rivals')
     player = models.ForeignKey(Player, verbose_name=_('Player'), related_name='rivals')
     rival = models.ForeignKey(Player, verbose_name=_('Rival'), blank=True, null=True)
-    score = models.FloatField(_('Score'))
+    score = models.FloatField(_('Score'), default=0)
     color = models.IntegerField(_('Color'), choices = COLOR_CHOICES)
+    rating = models.IntegerField(_('Rating'), default=0)
     
     class Meta:
         unique_together = ('round', 'player')
@@ -211,6 +226,8 @@ def post_save_task(sender, instance, **kwargs):
             rival.rival = instance.black
             rival.color = 0
             rival.score = 0.5 if instance.winner == 2 else 1 if instance.winner == 0 else 0
+            if instance.black:
+                rival.rating = round(instance.white.k_factor*(rival.score - (1/(1+10**((instance.black.new_rating-instance.white.new_rating)/400)))), 0)
             
             rival.save()
 
@@ -223,6 +240,8 @@ def post_save_task(sender, instance, **kwargs):
             rival.rival = instance.white
             rival.color = 1
             rival.score = 0.5 if instance.winner == 2 else 1 if instance.winner == 1 else 0
+            if instance.white:
+                rival.rating = round(instance.black.k_factor*(rival.score - (1/(1+10**((instance.white.new_rating-instance.black.new_rating)/400)))), 0)
     
             rival.save()
 
