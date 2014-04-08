@@ -29,6 +29,16 @@ class Tournament(NameModel):
         return False
     
     @property
+    def list_rounds(self):
+        last_round = self.last_round
+        last_serial_number = last_round.serial_number if last_round else 0
+        real_count_rounds = self.count_rounds
+        result = []
+        for i in range(self.get_count_rounds(self.players.count())):
+            result.append(dict(serial_number=i+1, is_current=bool(last_serial_number==i+1), is_canceled=bool(real_count_rounds<i+1)))
+        return result
+        
+    @property
     def count_rounds(self):
         if self.last_round:
             players = self.last_round.players.count()
@@ -39,7 +49,7 @@ class Tournament(NameModel):
     
     def get_count_rounds(self, players=None):
         if players and self.winners_count:
-            return log(players, 2) + log(self.winners_count, 2)
+            return int(log(players, 2)) + (int(log(self.winners_count-1, 2)) if self.winners_count > 1 else 0)
 
         return 0
 
@@ -80,8 +90,12 @@ class Round(models.Model):
             player1_prev = player1.rivals.order_by('-round__id')[0].color
             player2_prev = player2.rivals.order_by('-round__id')[0].color 
             if player1_prev == player2_prev:
-                player1_prev_prev = player1.rivals.order_by('-round__id')[1].color
-                player2_prev_prev = player2.rivals.order_by('-round__id')[1].color 
+                if self.serial_number != 2:
+                    player1_prev_prev = player1.rivals.order_by('-round__id')[1].color
+                    player2_prev_prev = player2.rivals.order_by('-round__id')[1].color
+                else:
+                    player1_prev_prev = player2_prev_prev = player1_prev
+                    
                 if player1_prev_prev == player1_prev_prev:
                     return {colors[player1_prev_prev]: player2, colors[0 if player1_prev_prev else 1]: player1}
                 elif player2_prev_prev == player2_prev_prev:

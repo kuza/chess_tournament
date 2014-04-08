@@ -50,6 +50,21 @@ class RoundForms(forms.ModelForm):
             'players': forms.CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        initial = kwargs.get('initial')
+        tournament = initial.get('tournament') if initial else None
+        players = initial.get('players') if initial else None
+        
+        super(RoundForms, self).__init__(*args, **kwargs)
+        
+        queryset = self.fields['players'].queryset
+        if tournament: 
+            queryset = queryset.filter(tournament=tournament)
+        if players:
+            queryset = queryset.filter(id__in=[player.id for player in players])
+            
+        self.fields['players'].queryset = queryset 
+
     def clean_players(self):
         players = self.cleaned_data["players"]
         tournament = self.cleaned_data["tournament"]

@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView
 from django.core.urlresolvers import reverse_lazy
+from django.db import connection
 
 from .models import Tournament, Player, Round, Pair
 from .forms import TournamentForms, PlayerForms, RoundForms, PairForms
@@ -39,6 +40,17 @@ class TournamentDetail(DetailView):
         context['rounds'] =context['object'].rounds.all()
         context['round_form'] = RoundForms(initial={'tournament': context['object']})
         
+        cursor = connection.cursor()
+        totals = cursor.execute('''
+            SELECT chess_player.id AS id, name, rating, score.score AS score from chess_player
+            LEFT JOIN (SELECT player_id, SUM(score) AS score FROM chess_rival
+                INNER JOIN chess_round ON (chess_rival.round_id = chess_round.id)
+                WHERE chess_round.tournament_id = %s
+                GROUP BY player_id) AS score ON (chess_player.id=score.player_id)
+            WHERE tournament_id = %s
+            ORDER BY score DESC, rating DESC''', [context['object'].id, context['object'].id]).fetchall()
+        context['totals'] = totals
+
         context['manage'] = True
         return context
 
@@ -111,4 +123,14 @@ class PlayerDelete(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('tournament_detail', kwargs={'pk': self.object.tournament.pk})
+
+
+class PlayerDetail(DetailView):
+    model = Player
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayerDetail, self).get_context_data(**kwargs)
+        context['rivals'] = context['object'].rivals.order_by('round__serial_number')
+        context['manage'] = True
+        return context
     
