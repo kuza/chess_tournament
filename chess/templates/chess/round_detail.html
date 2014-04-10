@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h2>Manage tournament: <a href="{% url 'tournament_detail' pk=object.tournament.pk %}">{{object.tournament}}</a> round {{object.serial_number}}</h2>
+            <h1>Manage tournament: <a href="{% url 'tournament_detail' pk=object.tournament.pk %}">{{object.tournament}}</a> round {{object.serial_number}}</h1>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -13,7 +13,7 @@
             </div>
             <div class="panel-body">
                 {% for pair in pairs %}
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-xs-12 col-sm-4">
                         <div class="thumbnail">
                             <div class="caption">
                                 <h3>Pair {{ pair.serial_number }}</h3>

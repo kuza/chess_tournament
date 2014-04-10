@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
     url(r'^$', views.HomePageView.as_view(), name='home'),
+    url(r'^tournament/(?P<pk>\d+)/$', views.TournamentDetail.as_view(), name='tournament'),
+    url(r'^player/(?P<pk>\d+)/$', views.PlayerDetail.as_view(), name='player'),
     
     url(r'^signin$', 'django.contrib.auth.views.login', {'template_name': 'chess/signin.html', 'extra_context': {'signin': True}}),
     url(r'^signout$', 'django.contrib.auth.views.logout_then_login', {'login_url': '/signin'}),

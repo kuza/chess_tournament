@@ -12,6 +12,7 @@ class HomePageView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
+        context['tournaments'] = Tournament.objects.order_by('-id').all()
         context['home'] = True
         return context
 

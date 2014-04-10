@@ -3,10 +3,24 @@
 {% block title %}Chess tournament{% endblock %}
 
 {% block content %}
-    <div class="container">
-      <div class="starter-template">
-        <h1>TOP 10 PLAYERS</h1>
-      </div>
-
-    </div><!-- /.container -->
+<div class="container">
+    <div class="page-header">
+        <h1>Tournaments</h1>
+    </div>
+    {% for tournament in tournaments %}
+        <div class="col-xs-12 col-sm-4">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3>{{ tournament.name }}</h3>
+                    <p>Count of winners: {{ tournament.winners_count }}</p>
+                    <p>Count of rounds: {{ tournament.count_rounds|floatformat:"0" }}</p>
+                    <p>Active round: {% if tournament.last_round %} {{ tournament.last_round.serial_number }} {% else %}Not start{% endif %}</p>
+                    <div class="btn-group">
+                        <a href="{% url 'tournament' pk=tournament.id %}" class="btn btn-primary" role="button">Detail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div><!-- /.container -->
 {% endblock %}
