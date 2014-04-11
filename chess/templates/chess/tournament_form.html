@@ -36,28 +36,7 @@
                <b>Tournaments</b>
             </div>
             <div class="panel-body">
-                {% for tournament in object_list %}
-                    <div class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h3>{{ tournament.name }}</h3>
-                                <p>Count of winners: {{ tournament.winners_count }}</p>
-                                <p>Count of rounds: {{ tournament.count_rounds|floatformat:"0" }}</p>
-                                <p>Active round: {% if tournament.last_round %} {{ tournament.last_round.serial_number }} {% else %}Not start{% endif %}</p>
-                                <div class="btn-group">
-                                    <a href="{% url 'tournament_detail' pk=tournament.id %}" class="btn btn-primary" role="button">Manage</a>
-                                </div>
-                                <div class="btn-group">
-                                    <form method="post" action="{% url 'tournament_delete' pk=tournament.id %}">
-                                        {% csrf_token %}
-                                        <input class="hidden" value="DELETE">
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                {% include "chess/tournaments.html" %}
             </div>
         </div>
     </div> <!-- /container -->

@@ -1,0 +1,36 @@
+{% for tournament in tournaments %}
+    <div class="col-xs-12 col-sm-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3>{{ tournament.name }}</h3>
+                <p>Count of winners: {{ tournament.winners_count }}</p>
+                <p>Count of rounds: {{ tournament.count_rounds|floatformat:"0" }}</p>
+                <p>Active round: {% if tournament.last_round %} {{ tournament.last_round.serial_number }} {% else %}Not start{% endif %}</p>
+                <div class="btn-group">
+                    <a href="{% url 'tournament' pk=tournament.id %}" class="btn btn-primary" role="button">Detail</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<div class="col-xs-12">
+    {% if tournaments.paginator.num_pages > 1 %}
+    <ul class="pagination">
+        {% if tournaments.has_previous %}
+            <li><a href="?page={{ tournaments.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for page in tournaments.paginator.page_range %}
+            <li class="{% if page == tournaments.number %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+        
+        {% if tournaments.has_next %}
+            <li><a href="?page={{ tournaments.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</div>

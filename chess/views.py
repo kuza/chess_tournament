@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView
 from django.core.urlresolvers import reverse_lazy
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection
 
 from .models import Tournament, Player, Round, Pair
@@ -12,7 +13,20 @@ class HomePageView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
-        context['tournaments'] = Tournament.objects.order_by('-id').all()
+        
+        paginator = Paginator(Tournament.objects.order_by('-id').all(), 12)
+    
+        page = self.request.GET.get('page')
+        try:
+            tournaments = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            tournaments = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            tournaments = paginator.page(paginator.num_pages)
+        
+        context['tournaments'] = tournaments
         context['home'] = True
         return context
 
@@ -24,7 +38,20 @@ class TournamentCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(TournamentCreate, self).get_context_data(**kwargs)
-        context['object_list'] = Tournament.objects.order_by('-id').all()
+
+        paginator = Paginator(Tournament.objects.order_by('-id').all(), 12)
+    
+        page = self.request.GET.get('page')
+        try:
+            tournaments = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            tournaments = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            tournaments = paginator.page(paginator.num_pages)
+
+        context['tournaments'] = tournaments
         context['manage'] = True
         return context
 
