@@ -31,6 +31,15 @@ class HomePageView(TemplateView):
         return context
 
 
+class AboutView(TemplateView):
+    template_name = 'chess/about.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(AboutView, self).get_context_data(**kwargs)
+        context['about'] = True
+        return context
+
+
 class TournamentCreate(CreateView):
     model = Tournament
     form_class = TournamentForms

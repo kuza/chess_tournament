@@ -1,4 +1,5 @@
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +44,7 @@
                     {% if user.is_authenticated %}
                         <li {% if manage %}class="active"{% endif %}><a href="/manage/tournament">{% trans "Manage Tournaments" %}</a></li>
                     {% endif %}
-                    <li {% if about %}class="active"{% endif %}><a href="#about">{% trans "About" %}</a></li>
+                    <li {% if about %}class="active"{% endif %}><a href="/about">{% trans "About" %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
@@ -51,6 +52,8 @@
                     {% else %}
                         <li {% if signin %}class="active"{% endif %}><a href="/signin">{% trans "Log in" %}</a></li>
                     {% endif %}
+                    <li {% if LANGUAGE_CODE == "en" %}class="active"{% endif %}><a href='#' title='{% trans "English" %}' onclick="document.getElementById('lang_en').submit()">EN</a></li>
+                    <li {% if LANGUAGE_CODE == "ru" %}class="active"{% endif %}><a href='#' title='{% trans "Russian" %}' onclick="document.getElementById('lang_ru').submit()">RU</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -59,7 +62,14 @@
     {% block content %}
     {% endblock %}
 
-
+    <form id='lang_en' action='/i18n/setlang/' method='POST'>
+        {% csrf_token %}
+        <input type='hidden' name='language' value='en'/>
+    </form>
+    <form id='lang_ru' action='/i18n/setlang/' method='POST'>
+        {% csrf_token %}
+        <input type='hidden' name='language' value='ru'/>
+    </form>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

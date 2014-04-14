@@ -7,15 +7,12 @@ admin.autodiscover()
 from chess import views
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'tournament.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
     
     url(r'^$', views.HomePageView.as_view(), name='home'),
     url(r'^tournament/(?P<pk>\d+)/$', views.TournamentDetail.as_view(), name='tournament'),
     url(r'^player/(?P<pk>\d+)/$', views.PlayerDetail.as_view(), name='player'),
+    url(r'^about$', views.AboutView.as_view(), name='about'),
     
     url(r'^signin$', 'django.contrib.auth.views.login', {'template_name': 'chess/signin.html', 'extra_context': {'signin': True}}),
     url(r'^signout$', 'django.contrib.auth.views.logout_then_login', {'login_url': '/signin'}),
@@ -35,4 +32,5 @@ urlpatterns = patterns('',
 
     url(r'^manage/player/(?P<pk>\d+)/$', login_required(views.PlayerDetail.as_view(), login_url='/signin'), name='player_detail'),
     
- )
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+)

@@ -1,0 +1,48 @@
+{% extends 'chess/base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}Chess tournament{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "About" %}</h1>
+    </div>
+    {% if LANGUAGE_CODE == "ru" %}
+    <p><b>Chess tournament</b> был создан как решение тестового задания для wargaming.net.</p>
+    <p><b>Chess tournament</b> это приложение по проведению турнира по шахматам по <b>швейцарской системе</b>.</p>
+    <p>Основные возможности приложения:</p>
+    <ul>
+        <li>Два интерфейса: для судей с возможностью управления и турниром и для простых пользователь с возможностью просмотра информации по турнирам.</li>
+        <li>Автоматический расчет пар при создании судьёй нового раунда в турнире с учетом цвета (не более двух одинаковых цветов подряд).</li>
+        <li>Расчет изменения рейтинга Эло после каждой партии.</li>
+        <li>Турнирная таблица с указанием текущего места, количества заработанных очков и нового рейтинга.</li>
+    </ul>
+    <p>Применяемый к-фактор для расчета рейтинга Эло:</p>
+    <ul>
+        <li>32 если текущий рейтинг меньше 2100.</li>
+        <li>24 если текущий рейтинг больше 2100 но меньше 2400.</li>
+        <li>16 если текущий рейтинг больше 2400.</li>
+    </ul>
+    <p>Разработчик: <a href="mailto:k.v-v@tut.by">k.v-v@tut.by</a></p>
+    {% else %}
+    <p><b>Chess tournament</b> was created as a solution to the test task for wargaming.net.</p>
+    <p><b>Chess tournament</b> is an application for the chess tournament by <b>Swiss-system</b>.</p>
+    <p>General features:</p>
+    <ul>
+        <li>Two interface: for referees (they can manage tournament) and for simple users (they have readonly permissions).</li>
+        <li>Automatic calculation of pairs when referee creates a new round in the tournament. Player gets color is different from the previous game. If this impossible player gets same color but not more than two consecutive.</li>
+        <li>Elo rating calculated after each game.</li>
+        <li>Tournament table has current place, current score and current Elo rating.</li>
+    </ul>
+    <p>K-factor for Elo rating:</p>
+    <ul>
+        <li>32 if current Elo rating less than 2100.</li>
+        <li>24 if current Elo rating more than 2100 but less that 2400.</li>
+        <li>16 if current Elo rating more than 2400.</li>
+    </ul>
+    <p>Developer: <a href="mailto:k.v-v@tut.by">k.v-v@tut.by</a></p>
+    {% endif%}
+</div><!-- /.container -->
+{% endblock %}
