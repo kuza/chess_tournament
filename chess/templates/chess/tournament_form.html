@@ -1,15 +1,16 @@
 {% extends 'chess/base.html' %}
+{% load i18n %}
 
-{% block title %}Chess tournament{% endblock %}
+{% block title %}Manage tournaments - Chess tournament{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h1>Manage tournaments</h1>
+            <h1>{% trans "Manage tournaments" %}</h1>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-               <b>Add tournament</b>
+               <b>{% trans "Add tournament" %}</b>
             </div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post">
@@ -25,7 +26,7 @@
                     {% endfor %}
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button class="btn btn-primary" type="submit">Add</button>
+                            <button class="btn btn-primary" type="submit">{% trans "Add" %}</button>
                         </div>
                     </div>
                 </form>
@@ -33,7 +34,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-               <b>Tournaments</b>
+               <b>{% trans "Tournaments" %}</b>
             </div>
             <div class="panel-body">
                 {% include "chess/tournaments.html" %}

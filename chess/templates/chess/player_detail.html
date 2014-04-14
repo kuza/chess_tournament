@@ -1,32 +1,33 @@
 {% extends 'chess/base.html' %}
+{% load i18n %}
 
-{% block title %}Chess tournament{% endblock %}
+{% block title %}{{object.tournament}} - Chess tournament{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="page-header">
         {% if user.is_authenticated %}
-            <h1>Manage tournament: <a href="{% url 'tournament_detail' pk=object.tournament.pk %}">{{object.tournament}}</a></h1>
+            <h1>{% trans "Manage tournament" %}: <a href="{% url 'tournament_detail' pk=object.tournament.pk %}">{{object.tournament}}</a></h1>
         {% else %}
-            <h1>Tournament: <a href="{% url 'tournament' pk=object.tournament.pk %}">{{object.tournament}}</a></h1>
+            <h1>{% trans "Tournament" %}: <a href="{% url 'tournament' pk=object.tournament.pk %}">{{object.tournament}}</a></h1>
         {% endif %}
-            <h1>Player: {{object}}</h1>
+            <h1>{% trans "Player" %}: {{object}}</h1>
         </div>
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <b>Rounds</b>
+                        <b>{% trans "Rounds" %}</b>
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12 table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Round</th>
-                                        <th>Color</th>
-                                        <th>Score</th>
-                                        <th>Rating</th>
+                                        <th>{% trans "Round" %}</th>
+                                        <th>{% trans "Color" %}</th>
+                                        <th>{% trans "Score" %}</th>
+                                        <th>{% trans "Rating" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

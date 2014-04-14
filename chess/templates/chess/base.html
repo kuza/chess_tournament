@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -38,18 +40,16 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li {% if home %}class="active"{% endif %}><a href="/">Home</a></li>
                     {% if user.is_authenticated %}
-                        <li {% if manage %}class="active"{% endif %}><a href="/manage/tournament">Manage Tournaments</a></li>
+                        <li {% if manage %}class="active"{% endif %}><a href="/manage/tournament">{% trans "Manage Tournaments" %}</a></li>
                     {% endif %}
-                    <li {% if about %}class="active"{% endif %}><a href="#about">About</a></li>
-                    <li {% if contact %}class="active"{% endif %}><a href="#contact">Contact</a></li>
+                    <li {% if about %}class="active"{% endif %}><a href="#about">{% trans "About" %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                        <li><a href="/signout">Sign out</a></li>
+                        <li><a href="/signout">{% trans "Log out" %} {{user}}</a></li>
                     {% else %}
-                        <li {% if signin %}class="active"{% endif %}><a href="/signin">Sign in</a></li>
+                        <li {% if signin %}class="active"{% endif %}><a href="/signin">{% trans "Log in" %}</a></li>
                     {% endif %}
                 </ul>
             </div><!--/.nav-collapse -->

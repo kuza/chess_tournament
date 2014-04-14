@@ -1,14 +1,15 @@
 {% extends 'chess/base.html' %}
+{% load i18n %}
 
-{% block title %}Chess tournament{% endblock %}
+{% block title %}{{object.name}} - Chess tournament{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="page-header">
         {% if user.is_authenticated %}
-            <h1>Manage tournament: {{object.name}}</h1>
+            <h1>{% trans "Manage tournament" %}: {{object.name}}</h1>
         {% else %}
-            <h1>Tournament: {{object.name}}</h1>
+            <h1>{% trans "Tournament" %}: {{object.name}}</h1>
         {% endif %}
         </div>
         <div class="row">
@@ -17,17 +18,17 @@
             <div class="col-xs-12 col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <b>Rounds</b>
+                        <b>{% trans "Rounds" %}</b>
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-6 col-sm-8">
-                            <p>Count of rounds: {{ object.count_rounds|floatformat:"0" }}</p>
+                            <p>{% trans "Count of rounds" %}: {{ object.count_rounds|floatformat:"0" }}</p>
                         </div>
                         <div class="col-xs-6 col-sm-4">
                             {% if not object.in_progress and object.count_rounds > rounds.count %}
                             <form method="get" action="{% url 'round_create' %}">
                                 {{ round_form.tournament }}
-                                <button class="btn btn-primary" type="submit">{% if rounds.count %}New round{% else %}Start tournament{% endif %}</button>
+                                <button class="btn btn-primary" type="submit">{% if rounds.count %}{% trans "New round" %}{% else %}{% trans "Start tournament" %}{% endif %}</button>
                             </form>
                             {% endif %}
                         </div>
@@ -36,7 +37,7 @@
                                 <thead>
                                     <tr>
                                         <th class="col-xs-3">#</th>
-                                        <th class="col-xs-3">Progress</th>
+                                        <th class="col-xs-3">{% trans "Progress" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -47,13 +48,13 @@
                                             <td class="col-xs-6">
                                                 {% if round == object.last_round %}
                                                 <div class="btn-group">
-                                                    <a href="{% url 'round_detail' pk=round.id %}" class="btn btn-primary btn-xs" role="button">Update</a>
+                                                    <a href="{% url 'round_detail' pk=round.id %}" class="btn btn-primary btn-xs" role="button">{% trans "Update" %}</a>
                                                 </div>
                                                 <div class="btn-group">
                                                     <form method="post" action="{% url 'round_delete' pk=round.id %}">
                                                         {% csrf_token %}
                                                         <input class="hidden" value="DELETE">
-                                                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                                                        <button class="btn btn-danger btn-xs" type="submit">{% trans "Delete" %}</button>
                                                     </form>
                                                 </div>
                                                 {% endif %}
@@ -71,7 +72,7 @@
                 {% if rounds.count == 0 %}
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                           <b>Add players</b>
+                           <b>{% trans "Add player" %}</b>
                         </div>
                         <div class="panel-body">
                             <form class="form-horizontal" role="form" action="{% url 'player_create' %}" method="post">
@@ -91,7 +92,7 @@
                                 {% endfor %}
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button class="btn btn-primary" type="submit">Add</button>
+                                        <button class="btn btn-primary" type="submit">{% trans "Add" %}</button>
                                     </div>
                                 </div>
                             </form>
@@ -100,15 +101,15 @@
                 {% endif %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                       <b>Players</b>
+                       <b>{% trans "Players" %}</b>
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12 table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Rating</th>
+                                        <th>{% trans "Name" %}</th>
+                                        <th>{% trans "Rating" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -121,7 +122,7 @@
                                                     <form method="post" action="{% url 'player_delete' pk=player.id %}">
                                                         {% csrf_token %}
                                                         <input class="hidden" value="DELETE">
-                                                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                                                        <button class="btn btn-danger btn-xs" type="submit">{% trans "Delete" %}</button>
                                                     </form>
                                                 {% endif %}
                                             </td>
@@ -137,7 +138,7 @@
             <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                       <b>Tournament table</b>
+                       <b>{% trans "Tournament table" %}</b>
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12 table-responsive">
@@ -145,10 +146,10 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Rating</th>
-                                        <th>Total</th>
-                                        <th>New rating</th>
+                                        <th>{% trans "Name" %}</th>
+                                        <th>{% trans "Rating" %}</th>
+                                        <th>{% trans "Total" %}</th>
+                                        <th>{% trans "New rating" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -160,9 +161,9 @@
                                             <td>{{ player.3 }}</td>
                                             <td>{{ player.4 }}</td>
                                             {% if user.is_authenticated %}
-                                            <td><a href="{% url 'player_detail' pk=player.0 %}" class="btn btn-primary btn-xs" role="button">Detail</a></td>
+                                            <td><a href="{% url 'player_detail' pk=player.0 %}" class="btn btn-primary btn-xs" role="button">{% trans "Detail" %}</a></td>
                                             {% else %}
-                                            <td><a href="{% url 'player' pk=player.0 %}" class="btn btn-primary btn-xs" role="button">Detail</a></td>
+                                            <td><a href="{% url 'player' pk=player.0 %}" class="btn btn-primary btn-xs" role="button">{% trans "Detail" %}</a></td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}

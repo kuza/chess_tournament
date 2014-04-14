@@ -1,0 +1,232 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-11 16:23+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms.py:16
+msgid "A player with that name already exists."
+msgstr "Игрок с таким именем уже существует."
+
+#: forms.py:40 models.py:80
+msgid "Round number"
+msgstr "Номер раунда"
+
+#: forms.py:43
+msgid "You can't create more rounds than calculated."
+msgstr "Нельзя создать больше раундов, чем рассчитано для этого турнира."
+
+#: models.py:9 templates/chess/tournament_detail.html:111
+#: templates/chess/tournament_detail.html:149
+msgid "Name"
+msgstr "Имя"
+
+#: models.py:19 templates/chess/tournaments.html:7
+msgid "Count of winners"
+msgstr "Количество призовых мест"
+
+#: models.py:58 models.py:81 templates/chess/player_detail.html:12
+#: templates/chess/tournament_detail.html:12
+msgid "Tournament"
+msgstr "Турнир"
+
+#: models.py:59 models.py:213 templates/chess/player_detail.html:30
+#: templates/chess/tournament_detail.html:112
+#: templates/chess/tournament_detail.html:150
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: models.py:82 templates/chess/tournament_detail.html:104
+msgid "Players"
+msgstr "Игроки"
+
+#: models.py:186 models.py:194 models.py:204
+#: templates/chess/round_detail.html:21 templates/chess/round_detail.html:28
+msgid "White"
+msgstr "Белые"
+
+#: models.py:187 models.py:195 models.py:205
+#: templates/chess/round_detail.html:22 templates/chess/round_detail.html:35
+msgid "Black"
+msgstr "Чёрные"
+
+#: models.py:188 templates/chess/round_detail.html:42
+msgid "Draw"
+msgstr "Ничья"
+
+#: models.py:189
+msgid "Cancel"
+msgstr "Отмена"
+
+#: models.py:192
+msgid "Pair number"
+msgstr "Номер пары"
+
+#: models.py:193 models.py:208 templates/chess/player_detail.html:27
+msgid "Round"
+msgstr "Раунд"
+
+#: models.py:196 templates/chess/round_detail.html:46
+msgid "Winner"
+msgstr "Победитель"
+
+#: models.py:209 templates/chess/player_detail.html:14
+msgid "Player"
+msgstr "Игрок"
+
+#: models.py:210
+msgid "Rival"
+msgstr "Соперник"
+
+#: models.py:211 templates/chess/player_detail.html:29
+msgid "Score"
+msgstr "Очки"
+
+#: models.py:212 templates/chess/player_detail.html:28
+msgid "Color"
+msgstr "Цвет"
+
+#: templates/chess/base.html:44
+msgid "Manage Tournaments"
+msgstr "Управление турнирами"
+
+#: templates/chess/base.html:46
+msgid "About"
+msgstr "О проекте"
+
+#: templates/chess/base.html:50
+msgid "Log out"
+msgstr "Выйти"
+
+#: templates/chess/base.html:52 templates/chess/signin.html:19
+msgid "Log in"
+msgstr "Войти"
+
+#: templates/chess/home.html:9 templates/chess/tournament_form.html:37
+msgid "Tournaments"
+msgstr "Турниры"
+
+#: templates/chess/player_detail.html:10 templates/chess/round_detail.html:9
+#: templates/chess/round_form.html:9 templates/chess/tournament_detail.html:10
+msgid "Manage tournament"
+msgstr "Управление турниром"
+
+#: templates/chess/player_detail.html:20
+#: templates/chess/tournament_detail.html:21
+msgid "Rounds"
+msgstr "Раунды"
+
+#: templates/chess/round_detail.html:13
+msgid "Pairs"
+msgstr "Пары"
+
+#: templates/chess/round_detail.html:20
+msgid "Pair"
+msgstr "Пара"
+
+#: templates/chess/round_form.html:13
+msgid "Create round"
+msgstr "Создать раунд"
+
+#: templates/chess/round_form.html:42
+msgid "Create"
+msgstr "Создать"
+
+#: templates/chess/signin.html:10 templates/chess/tournament_form.html:9
+msgid "Manage tournaments"
+msgstr "Управление турнирами"
+
+#: templates/chess/signin.html:13
+msgid "Your username and password didn't match. Please try again."
+msgstr "Ваше имя пользователя и пароль не совпадают. Пожалуйста, попробуйте еще раз."
+
+#: templates/chess/signin.html:16
+msgid "User name"
+msgstr "Имя пользователя"
+
+#: templates/chess/signin.html:17
+msgid "Password"
+msgstr "Пароль"
+
+#: templates/chess/tournament_detail.html:25
+#: templates/chess/tournaments.html:8
+msgid "Count of rounds"
+msgstr "Количество раундов"
+
+#: templates/chess/tournament_detail.html:31
+msgid "New round"
+msgstr "Новый раунд"
+
+#: templates/chess/tournament_detail.html:31
+msgid "Start tournament"
+msgstr "Начать турнир"
+
+#: templates/chess/tournament_detail.html:40
+msgid "Progress"
+msgstr "Прогресс"
+
+#: templates/chess/tournament_detail.html:51
+msgid "Update"
+msgstr "Обновить"
+
+#: templates/chess/tournament_detail.html:57
+#: templates/chess/tournament_detail.html:125
+#: templates/chess/tournaments.html:22
+msgid "Delete"
+msgstr "Удалить"
+
+#: templates/chess/tournament_detail.html:75
+msgid "Add player"
+msgstr "Добавить игрока"
+
+#: templates/chess/tournament_detail.html:95
+#: templates/chess/tournament_form.html:29
+msgid "Add"
+msgstr "Добавить"
+
+#: templates/chess/tournament_detail.html:141
+msgid "Tournament table"
+msgstr "Турнирная таблица"
+
+#: templates/chess/tournament_detail.html:151
+msgid "Total"
+msgstr "Всего"
+
+#: templates/chess/tournament_detail.html:152
+msgid "New rating"
+msgstr "Новый рейтинг"
+
+#: templates/chess/tournament_detail.html:164
+#: templates/chess/tournament_detail.html:166
+#: templates/chess/tournaments.html:12
+msgid "Detail"
+msgstr "Подробнее"
+
+#: templates/chess/tournament_form.html:13
+msgid "Add tournament"
+msgstr "Добавить турнир"
+
+#: templates/chess/tournaments.html:9
+msgid "Active round"
+msgstr "Текущий раунд"
+
+#: templates/chess/tournaments.html:9
+msgid "Not start"
+msgstr "Ещё не стартовал"
+
+#: templates/chess/tournaments.html:16
+msgid "Manage"
+msgstr "Управление"

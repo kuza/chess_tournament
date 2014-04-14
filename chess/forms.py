@@ -13,7 +13,7 @@ class TournamentForms(forms.ModelForm):
 
 class PlayerForms(forms.ModelForm):
     error_messages = {
-        'duplicate_name': _("A user with that name already exists."),
+        'duplicate_name': _("A player with that name already exists."),
     }
 
     class Meta:
@@ -24,12 +24,14 @@ class PlayerForms(forms.ModelForm):
             'tournament': forms.HiddenInput()
         }
 
-    def clean_name(self):
+    def clean(self):
         name = self.cleaned_data["name"]
+        tournament = self.cleaned_data["tournament"]
+        
         try:
-            Player.objects.get(name=name, tournament=self.tournament)
+            Player.objects.get(name=name, tournament=tournament)
         except Player.DoesNotExist:
-            return name
+            return self.cleaned_data
         raise forms.ValidationError(
             self.error_messages['duplicate_name'],
             code='duplicate',

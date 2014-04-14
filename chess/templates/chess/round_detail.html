@@ -1,48 +1,49 @@
 {% extends 'chess/base.html' %}
+{% load i18n %}
 
-{% block title %}Chess tournament{% endblock %}
+{% block title %}{{object.tournament}} - Chess tournament{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="page-header">
-            <h1>Manage tournament: <a href="{% url 'tournament_detail' pk=object.tournament.pk %}">{{object.tournament}}</a> round {{object.serial_number}}</h1>
+            <h1>{% trans "Manage tournament" %}: <a href="{% url 'tournament_detail' pk=object.tournament.pk %}">{{object.tournament}}</a> round {{object.serial_number}}</h1>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-               <b>Pairs</b>
+               <b>{% trans "Pairs" %}</b>
             </div>
             <div class="panel-body">
                 {% for pair in pairs %}
                     <div class="col-xs-12 col-sm-4">
                         <div class="thumbnail">
                             <div class="caption">
-                                <h3>Pair {{ pair.serial_number }}</h3>
-                                <p>White: <b>{{ pair.white }}</b></p>
-                                <p>Black: <b>{{ pair.black }}</b></p>
+                                <h3>{% trans "Pair" %} {{ pair.serial_number }}</h3>
+                                <p>{% trans "White" %}: <b>{{ pair.white }}</b></p>
+                                <p>{% trans "Black" %}: <b>{{ pair.black }}</b></p>
                                 {% if pair.winner == None %}
                                     <div class="btn-group">
                                        <form method="post" action="{% url 'pair_update' pk=pair.id %}">
                                             {% csrf_token %}
                                             <input class="hidden" id="id_winner" name="winner" value="0">
-                                            <button class="btn btn-primary" type="submit">White</button>
+                                            <button class="btn btn-primary" type="submit">{% trans "White" %}</button>
                                         </form>
                                     </div>
                                     <div class="btn-group">
                                        <form method="post" action="{% url 'pair_update' pk=pair.id %}">
                                             {% csrf_token %}
                                             <input class="hidden" id="id_winner" name="winner" value="1">
-                                            <button class="btn btn-success" type="submit">Black</button>
+                                            <button class="btn btn-success" type="submit">{% trans "Black" %}</button>
                                         </form>
                                     </div>
                                      <div class="btn-group">
                                        <form method="post" action="{% url 'pair_update' pk=pair.id %}">
                                             {% csrf_token %}
                                             <input class="hidden" id="id_winner" name="winner" value="2">
-                                            <button class="btn btn-info" type="submit">Draw</button>
+                                            <button class="btn btn-info" type="submit">{% trans "Draw" %}</button>
                                         </form>
                                     </div>
                                 {% else %}
-                                    <h3>Winner: {{ pair.get_winner_display }}</h3>
+                                    <h3>{% trans "Winner" %}: {{ pair.get_winner_display }}</h3>
                                 {% endif %}
                             </div>
                         </div>
