@@ -24,14 +24,19 @@ class PlayerForms(forms.ModelForm):
             'tournament': forms.HiddenInput()
         }
 
-    def clean(self):
+    def __init__(self, *args, **kwargs):
+        super(PlayerForms, self).__init__(*args, **kwargs)
+        ordered_fields = ['tournament', 'name']
+        self.fields.keyOrder = ordered_fields + [k for k in self.fields.keys() if k not in ordered_fields]
+
+    def clean_name(self):
         name = self.cleaned_data["name"]
         tournament = self.cleaned_data["tournament"]
         
         try:
             Player.objects.get(name=name, tournament=tournament)
         except Player.DoesNotExist:
-            return self.cleaned_data
+            return name
         raise forms.ValidationError(
             self.error_messages['duplicate_name'],
             code='duplicate',

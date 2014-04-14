@@ -70,9 +70,9 @@ class TournamentDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TournamentDetail, self).get_context_data(**kwargs)
-        
+
         context['players'] = context['object'].players.all()
-        context['player_form'] = PlayerForms(initial={'tournament': context['object']})
+        context['player_form'] = context.get('player_form') or PlayerForms(initial={'tournament': context['object']})
         
         context['rounds'] =context['object'].rounds.all()
         context['round_form'] = RoundForms(initial={'tournament': context['object']})
@@ -153,6 +153,10 @@ class PlayerCreate(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('tournament_detail', kwargs={'pk': self.object.tournament.pk})
+
+    def form_invalid(self, form):
+        td = TournamentDetail(object=form.cleaned_data['tournament'], request=self.request)
+        return td.render_to_response(td.get_context_data(player_form=form))
 
 
 class PlayerDelete(DeleteView):
